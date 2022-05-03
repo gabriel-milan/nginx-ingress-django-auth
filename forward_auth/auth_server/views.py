@@ -11,8 +11,8 @@ from .utils import (
 def auth(request: HttpRequest):
     redirect_uri = get_redirect_uri(request)
     if request.user.is_authenticated:
-        if redirect_uri:
-            return redirect(redirect_uri)
+        if not redirect_uri:
+            return redirect(f"{get_public_uri()}/auth/login/")
         return HttpResponse("OK")
     return HttpResponse("Unauthorized", status=401)
 
