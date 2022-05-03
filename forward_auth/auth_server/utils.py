@@ -26,8 +26,12 @@ def get_redirect_uri(request: HttpRequest, default: str = None) -> str:
     Returns:
         The redirect_uri from the request.
     """
-    # First we try to get the redirect_uri from the request.
+    # First we try to get the redirect_uri from the request headers.
     redirect_uri = request.headers.get("X-Original-Url")
+
+    # Then we try to get from the URL parameters
+    if redirect_uri is None:
+        redirect_uri = request.GET.get("rd", None)
 
     # If the redirect_uri is still not in the request, we try to get it
     # from the default value.

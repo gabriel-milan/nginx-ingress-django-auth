@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth import logout, login, authenticate
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
@@ -8,8 +10,11 @@ from .utils import (
     is_authenticated,
 )
 
+logger = logging.getLogger(__name__)
+
 
 def auth(request: HttpRequest):
+    logger.info(f"Headers: {request.headers}")
     redirect_uri = get_redirect_uri(request)
     if is_authenticated(request):
         return HttpResponse("OK")
@@ -19,6 +24,7 @@ def auth(request: HttpRequest):
 
 
 def signin(request: HttpRequest):
+    logger.info(f"Headers: {request.headers}")
     redirect_uri = get_redirect_uri(request)
     if request.user.is_authenticated:
         return redirect(redirect_uri)
@@ -36,6 +42,7 @@ def signin(request: HttpRequest):
 
 
 def signout(request: HttpRequest):
+    logger.info(f"Headers: {request.headers}")
     if request.user.is_authenticated:
         logout(request)
         redirect_uri = get_redirect_uri(request, default="/")
