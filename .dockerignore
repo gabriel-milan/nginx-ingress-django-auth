@@ -149,3 +149,4 @@ cython_debug/
 .whitesource
 deployment/
 Dockerfile
+.vscode/
