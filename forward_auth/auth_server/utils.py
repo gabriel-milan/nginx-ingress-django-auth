@@ -54,9 +54,12 @@ def is_authenticated(request: HttpRequest) -> bool:
     token = request.headers.get("Authorization")
     if token is not None:
         try:
-            token: Token = Token.objects.get(token=token)
-            if token.active:
+            token = token.split("Bearer ")[1]
+            token_obj: Token = Token.objects.get(token=token)
+            if token_obj.active:
                 return True
         except Token.DoesNotExist:
+            return False
+        except IndexError:
             return False
     return False
