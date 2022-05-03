@@ -27,11 +27,6 @@ def get_redirect_uri(request: HttpRequest, default: str = None) -> str:
     # First we try to get the redirect_uri from the request.
     redirect_uri = request.headers.get("X-Original-Url")
 
-    # If the redirect_uri is not in the request, we try to get it
-    # from headers.
-    if (redirect_uri is None) and ("X-Forwarded-Host" in request.headers):
-        redirect_uri = f"{request.headers['X-Forwarded-Proto']}://{request.headers['X-Forwarded-Host']}"
-
     # If the redirect_uri is still not in the request, we try to get it
     # from the default value.
     if redirect_uri is None:
