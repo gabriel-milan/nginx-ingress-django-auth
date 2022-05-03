@@ -16,7 +16,7 @@ spec:
         app: nginx-ingress-django-auth
     spec:
       containers:
-        - image: gabrielmilan/nginx-ingress-django-auth:v0.0.1
+        - image: gabrielmilan/nginx-ingress-django-auth:v0.0.4
           name: nginx-ingress-django-auth
           ports:
             - containerPort: 80
