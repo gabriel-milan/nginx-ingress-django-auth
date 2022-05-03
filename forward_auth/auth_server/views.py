@@ -5,12 +5,13 @@ from django.shortcuts import render, redirect
 from .utils import (
     get_redirect_uri,
     get_public_uri,
+    is_authenticated,
 )
 
 
 def auth(request: HttpRequest):
     redirect_uri = get_redirect_uri(request)
-    if request.user.is_authenticated:
+    if is_authenticated(request):
         return HttpResponse("OK")
     elif not redirect_uri:
         return redirect(f"{get_public_uri()}/auth/login/")

@@ -1,6 +1,8 @@
 from os import getenv
 
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest
+
+from forward_auth.auth_server.models import Token
 
 
 def get_public_uri() -> str:
@@ -34,3 +36,27 @@ def get_redirect_uri(request: HttpRequest, default: str = None) -> str:
 
     # We return the redirect_uri.
     return redirect_uri
+
+
+def is_authenticated(request: HttpRequest) -> bool:
+    """
+    Check if the user is authenticated either through sessions
+    or Bearer token.
+
+    Args:
+        request: The request object.
+
+    Returns:
+        True if the user is authenticated, False otherwise.
+    """
+    if request.user.is_authenticated:
+        return True
+    token = request.headers.get("Authorization")
+    if token is not None:
+        try:
+            token: Token = Token.objects.get(token=token)
+            if token.active:
+                return True
+        except Token.DoesNotExist:
+            return False
+    return False
